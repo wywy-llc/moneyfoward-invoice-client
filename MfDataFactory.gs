@@ -46,7 +46,8 @@ class MfDataTemplate {
    * @return {string} 来月末日付(YYYY-MM-DD)
    */
   static getNextMonthLastDay() {
-    const nextMonthLastDay = new Date(dt.getFullYear(), dt.getMonth() + 2, 0);
+    const today = new Date();
+    const nextMonthLastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
     return `${nextMonthLastDay.getFullYear()}-${nextMonthLastDay.getMonth() + 1}-${nextMonthLastDay.getDate()}`;
   }
   /**

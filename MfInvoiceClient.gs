@@ -121,6 +121,9 @@ function mfCallback(request) {
  */
 function mfTestConnectivity() {
   const client = new MfInvoiceClient();
-  const billing = MfDataTemplate.createBilling('tt');
+  // 請求書一覧取得
   Logger.log(client.billings.list());
+
+  // 請求書作成(こちらをテストする場合はコメントアウトを外してください。)
+  //Logger.log(client.billings.create(MfDataTemplate.createBilling("部門ID")));
 }
