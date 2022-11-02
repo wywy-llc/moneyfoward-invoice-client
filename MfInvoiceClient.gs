@@ -9,12 +9,17 @@ class MfInvoiceClient {
    * @param {string} clientId
    * @param {string} clientSecret
    */
-  constructor(
-    clientId = PropertiesService.getScriptProperties().getProperty('CLIENT_ID'),
-    clientSecret = PropertiesService.getScriptProperties().getProperty('CLIENT_SECRET')
-  ) {
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
+  constructor(clientId, clientSecret) {
+    if (clientId) {
+      this.clientId = clientId;
+    } else {
+      this.clientId = PropertiesService.getScriptProperties().getProperty('CLIENT_ID');
+    }
+    if (clientSecret) {
+      this.clientSecret = clientSecret;
+    } else {
+      this.clientSecret = PropertiesService.getScriptProperties().getProperty('CLIENT_SECRET')
+    }
     this.baseUrl = 'https://invoice.moneyforward.com/api/v2/';
     this.initApiMethod();
   }
@@ -98,32 +103,11 @@ class MfInvoiceClient {
     }
   }
 }
-
 /**
- * マネーフォワードAPI認証
+ * クライアントを生成します。
+ * @param {string} clientId
+ * @param {string} clientSecret
  */
-function mfApiAuth() {
-  // 認証用URLを取得しコンソールに出力
-  const client = new MfInvoiceClient();
-  console.log(client.getAuthorizationUrl());
-}
-
-/**
- * コールバック関数
- */
-function mfCallback(request) {
-  const client = new MfInvoiceClient();
-  return client.handleCallback(request);
-}
-
-/**
- * 疎通テスト(請求書一覧取得)を実行します。
- */
-function mfTestConnectivity() {
-  const client = new MfInvoiceClient();
-  // 請求書一覧取得
-  Logger.log(client.billings.list());
-
-  // 請求書作成(こちらをテストする場合はコメントアウトを外してください。)
-  //Logger.log(client.billings.create(MfDataTemplate.createBilling("部門ID")));
+function createClient(clientId = null, clientSecret = null) {
+  return new MfInvoiceClient(clientId, clientSecret);
 }
