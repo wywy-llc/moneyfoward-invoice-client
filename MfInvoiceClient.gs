@@ -56,6 +56,7 @@ class MfInvoiceClient {
           muteHttpExceptions: true,
           headers: this.getHeaders(),
         };
+        Logger.log(billing);
         const res = UrlFetchApp.fetch(reqUrl, options);
         return this.processResponse(res);
       })
