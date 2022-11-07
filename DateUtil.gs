@@ -11,7 +11,7 @@ function convertDateToString(date) {
  * @param {string} date 
  */
 function convertDateTimeToString(date) {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes}:${date.getSeconds}`;
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 }
 
 /**
@@ -29,6 +29,15 @@ function formatDateTimeString(date) {
 function getTodayString() {
   const today = new Date();
   return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+}
+
+/**
+ * 現在時刻の文字列を取得します。
+ * @return {string} 本日日付((YYYY-MM-DD hh:mm:dd)
+ */
+function getNow() {
+  const today = new Date();
+  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;;
 }
 
 /**

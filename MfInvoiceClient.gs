@@ -36,21 +36,23 @@ class MfInvoiceClient {
        */
       list: (() => {
         const reqUrl = this.baseUrl + 'billings';
+        const method = 'GET';
         const options = {
-          method: 'GET',
+          method: method,
           muteHttpExceptions: true,
           headers: this.getHeaders(),
         };
         const res = UrlFetchApp.fetch(reqUrl, options);
-        return this.processResponse(res);
+        return this.processResponse(method, reqUrl, res);
       }),
       /**
        * 請求書の作成
        */
       create: ((billing) => {
         const reqUrl = this.baseUrl + 'billings';
+        const method = 'POST';
         const options = {
-          method: 'POST',
+          method: method,
           payload: JSON.stringify(billing),
           contentType: 'application/json',
           muteHttpExceptions: true,
@@ -58,16 +60,30 @@ class MfInvoiceClient {
         };
         Logger.log(billing);
         const res = UrlFetchApp.fetch(reqUrl, options);
-        return this.processResponse(res);
+        return this.processResponse(method, reqUrl, res);
       })
     }
   }
 
-  processResponse(res) {
+  processResponse(method, reqUrl, res) {
+    const userLoginId = Session.getActiveUser().getUserLoginId();
+    const properties = PropertiesService.getScriptProperties();
     if (res.getResponseCode() === 200 || res.getResponseCode() === 201) {
+      const spreadsheetId = properties.getProperty('resLogId');
+      if (spreadsheetId) {
+        const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+        const sheet = spreadsheet.getSheetByName('logs');
+        sheet.appendRow([userLoginId, method, reqUrl, getNow()]);
+      }
       Logger.log('Request success.');
       return JSON.parse(res.getContentText());
     } else {
+      const spreadsheetId = properties.getProperty('errorLogId');
+      if (spreadsheetId) {
+        const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+        const sheet = spreadsheet.getSheetByName('logs');
+        sheet.appendRow([userLoginId, method, reqUrl, res.getResponseCode(), res.getContentText(), getNow()]);
+      }
       Logger.log(`Request Failed !!. ${res.getResponseCode()}: ${res.getContentText()}`);
       return res;
     }
