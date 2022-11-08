@@ -191,8 +191,7 @@ class MfInvoiceClient {
         const sheet = spreadsheet.getSheetByName('logs');
         sheet.appendRow([userLoginId, method, reqUrl, res.getResponseCode(), res.getContentText(), getNow()]);
       }
-      Logger.log(`Request Failed !!. ${res.getResponseCode()}: ${res.getContentText()}`);
-      return res;
+      throw new Error(`Request Failed !!. ${res.getResponseCode()}: ${res.getContentText()}`)
     }
   }
 
