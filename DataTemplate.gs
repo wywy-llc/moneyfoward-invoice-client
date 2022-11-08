@@ -30,3 +30,30 @@ function getBillingTemplete() {
     },
   };
 }
+
+function getQuoteTemplete() {
+  return {
+    quote: {
+      department_id: '',
+      title: '',
+      memo: '',
+      quote_date: this.getTodayString(),
+      expired_date: this.getNextMonthLastDay(),
+      billing_number: this.getBillingNumber(),
+      note: '',
+      document_name: '',
+      tags: '',
+      items: [
+        {
+          name: '',
+          code: '',
+          detail: '',
+          unit_price: 0,
+          unit: '',
+          quantity: 0,
+          disp_order: 0,
+        },
+      ]
+    },
+  };
+}
