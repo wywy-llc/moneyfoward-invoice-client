@@ -61,10 +61,21 @@ function getNextMonthLastDay() {
 }
 /**
  * 請求番号を作成します。
+ * パターン1：YYYYMMDD-hhmmdd
+ * パターン2：YYYY-MMDD-hhmmdd
  * @return {string} 請求番号(YYYYMMDD-hhmmdd)
  */
-function getBillingNumber() {
+function getBillingNumber(pattern = 1) {
   const today = new Date();
-  return `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}-${today.getHours().toString().padStart(2, '0')}${today.getMinutes().toString().padStart(2, '0')}${today.getSeconds().toString().padStart(2, '0')}`;
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const date = today.getDate().toString().padStart(2, '0');
+  const hours = today.getHours().toString().padStart(2, '0');
+  const minutes = today.getMinutes().toString().padStart(2, '0');
+  const seconds = today.getSeconds().toString().padStart(2, '0');
+  if (pattern === 2) {
+    return `${today.getFullYear()}-${month}${date}-${hours}${minutes}${seconds}`
+  }
+  return `${today.getFullYear()}${month}${date}-${hours}${minutes}${seconds}`;
 }
+
 
