@@ -97,7 +97,18 @@ class MfInvoiceClient {
         Logger.log(quote);
         const res = UrlFetchApp.fetch(reqUrl, options);
         return this.processResponse(method, reqUrl, res);
-      })
+      }),
+      pdf: ((id) => {
+        const reqUrl = this.baseUrl + 'quotes/' + id + '.pdf';
+        const method = 'GET';
+        const options = {
+          method: method,
+          headers: {
+            Authorization: 'Bearer ' + this.getAccessToken()
+          },
+        };
+        return UrlFetchApp.fetch(reqUrl, options).getAs('application/pdf');
+      }),
     }
     /**
      * 取引先関連
@@ -171,6 +182,25 @@ class MfInvoiceClient {
         return this.processResponse(method, reqUrl, res);
       })
     }
+    /**
+     * 事業者情報取得
+     */
+    this.office = {
+      /**
+       * 一覧取得
+       */
+      find: (() => {
+        const reqUrl = this.baseUrl + 'office';
+        const method = 'GET';
+        const options = {
+          method: method,
+          muteHttpExceptions: true,
+          headers: this.getHeaders(),
+        };
+        const res = UrlFetchApp.fetch(reqUrl, options);
+        return this.processResponse(method, reqUrl, res);
+      }),
+    }
   }
   processResponse(method, reqUrl, res) {
     const userLoginId = Session.getActiveUser().getUserLoginId();
@@ -225,6 +255,10 @@ class MfInvoiceClient {
       Authorization: 'Bearer ' + this.getAccessToken()
     }
   }
+
+  logout() {
+    this.getService().reset();
+  }
 }
 /**
  * クライアントを生成します。
@@ -233,6 +267,10 @@ class MfInvoiceClient {
  */
 function createClient(clientId = null, clientSecret = null) {
   return new MfInvoiceClient(clientId, clientSecret);
+}
+
+function logoutClient(clientId = null, clientSecret = null) {
+  createClient(clientId, clientSecret).logout();
 }
 
 function testbillingsList() {
@@ -247,6 +285,6 @@ function testPartnersList() {
   Logger.log(createClient().partners.list());
 }
 
-function testItemList(){
+function testItemList() {
   Logger.log(createClient().items.list());
 }
