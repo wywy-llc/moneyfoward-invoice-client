@@ -117,8 +117,8 @@ class MfInvoiceClient {
       /**
        * 一覧取得
        */
-      list: (() => {
-        const reqUrl = this.baseUrl + 'partners';
+      list: ((page = 1, perPage = 100) => {
+        const reqUrl = this.baseUrl + `partners?page=${page}&per_page=${perPage}`;
         const method = 'GET';
         const options = {
           method: method,
