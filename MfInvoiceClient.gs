@@ -46,6 +46,25 @@ class MfInvoiceClient {
         return this.processResponse(method, reqUrl, res);
       }),
       /**
+       * 検索
+       * @param {number} page ページ番号
+       * @param {string} query 検索文字列。取引先(完全一致)、ステータス、件名etc
+       * @param {string} from 開始日
+       * @param {string} to 終了日
+       */
+      search: ((page, query, from, to) => {
+        const reqUrl = this.baseUrl + 'billings/search' +
+          `?page=${page}&per_page=100&excise_type=boolean&q=${query}&range_key=billing_date&from=${from}&to=${to}`;
+        const method = 'GET';
+        const options = {
+          method: method,
+          muteHttpExceptions: true,
+          headers: this.getHeaders(),
+        };
+        const res = UrlFetchApp.fetch(reqUrl, options);
+        return this.processResponse(method, reqUrl, res);
+      }),
+      /**
        * 作成
        */
       create: ((billing) => {
@@ -273,18 +292,44 @@ function logoutClient(clientId = null, clientSecret = null) {
   createClient(clientId, clientSecret).logout();
 }
 
-function testbillingsList() {
-  Logger.log(createClient().quotes.list());
-}
+//テスト用
 
-function testQuotesList() {
-  Logger.log(createClient().quotes.list());
-}
+// function testbillingsList() {
+//   Logger.log(createClient().quotes.list());
+// }
 
-function testPartnersList() {
-  Logger.log(createClient().partners.list());
-}
+// function testQuotesList() {
+//   Logger.log(createClient().quotes.list());
+// }
 
-function testItemList() {
-  Logger.log(createClient().items.list());
-}
+// function testPartnersList() {
+//   Logger.log(createClient().partners.list());
+// }
+
+// function testItemList() {
+//   Logger.log(createClient().items.list());
+// }
+
+// function testSeachBillings() {
+//   const page = 1;
+//   const query = encodeURI('入金済み');
+//   const to = getThisMonthLastDay();
+//   let from = new Date();
+//   from.setDate(1);
+//   from.setHours(0);
+//   from.setMinutes(0);
+//   from.setSeconds(0);
+//   from.setMonth(from.getMonth() - 3);
+//   from = convertDateToString(from)
+//   Logger.log(JSON.stringify(createClient().billings.search(page, query, from, to)));
+// }
+
+// function authorizationUrl() {
+//   const client = new MfInvoiceClient();
+//   Logger.log(client.getAuthorizationUrl());
+// }
+
+// function mfCallback(request) {
+//   const client = new MfInvoiceClient();
+//   client.handleCallback(request);
+// }

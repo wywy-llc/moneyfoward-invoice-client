@@ -78,4 +78,3 @@ function getBillingNumber(pattern = 1) {
   return `${today.getFullYear()}${month}${date}-${hours}${minutes}${seconds}`;
 }
 
-
